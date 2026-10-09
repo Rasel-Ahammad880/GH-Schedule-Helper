@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GH Schedule Helper</title>
+<style>
+body{font-family:Arial,sans-serif;background:#101827;color:white;text-align:center;padding:25px 15px}
+.panel{background:#202d40;padding:22px;border-radius:16px;max-width:400px;margin:auto}
+button,input{padding:13px;margin:10px 0;border-radius:8px;font-size:16px}
+button{background:#17b978;border:none;width:100%;font-weight:bold}
+input{width:90%}
+</style>
+</head>
+<body>
+<div class="panel">
+<h1>GH Schedule Helper</h1>
+<p>Schedule Reminder</p>
+<label for="time">Schedule release time</label>
+<input type="datetime-local" id="time">
+<button onclick="start()">START</button>
+<button onclick="stop()">STOP</button>
+<p id="status">Status: Ready</p>
+</div>
+<script>
+let timer;
+function start(){
+clearInterval(timer);
+const selected=document.getElementById("time").value;
+if(!selected){alert("Please select a date and time");return}
+const target=new Date(selected).getTime();
+if(target<=Date.now()){alert("Choose a future time");return}
+document.getElementById("status").textContent="Status: Waiting";
+timer=setInterval(()=>{
+if(Date.now()>=target){
+clearInterval(timer);
+alert("Time to check your GH schedule!");
+document.getElementById("status").textContent="Status: Reminder fired";
+}
+},1000);
+}
+function stop(){
+clearInterval(timer);
+document.getElementById("status").textContent="Status: Stopped";
+}
+</script>
+</body>
+</html>
